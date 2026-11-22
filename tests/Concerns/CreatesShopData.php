@@ -3,7 +3,6 @@
 namespace Tests\Concerns;
 
 use App\Models\Cart;
-use App\Models\Category;
 use App\Models\Order;
 use App\Models\Post;
 use App\Models\Product;
@@ -31,20 +30,12 @@ trait CreatesShopData
         return $user;
     }
 
-    protected function makeCategory(?string $title = null): Category
-    {
-        $this->sequence++;
-
-        return Category::create(['title' => $title ?? "Kategori {$this->sequence}"]);
-    }
-
-    protected function makeShop(User $owner, ?Category $category = null, array $attributes = []): Post
+    protected function makeShop(User $owner, array $attributes = []): Post
     {
         $this->sequence++;
 
         return Post::create(array_merge([
             'user_id' => $owner->id,
-            'category_id' => ($category ?? $this->makeCategory())->id,
             'title' => "Cafe {$this->sequence}",
             'body' => 'Tempat nongkrong yang nyaman.',
             'latitude' => 1.1234567,

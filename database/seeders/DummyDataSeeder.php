@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\User;
@@ -159,13 +158,11 @@ class DummyDataSeeder extends Seeder
     /** @return Post[] */
     private function createShops(array $owners): array
     {
-        $categories = Category::all()->all();
         $posts = [];
 
         foreach (self::SHOPS as $i => [$name, $area, $street, $lat, $lng]) {
             $post = Post::create([
                 'user_id' => $owners[$i < 6 ? 0 : 1]->id,
-                'category_id' => $this->pick($categories)->id,
                 'title' => $name,
                 'body' => $this->pick(self::SHOP_BODIES),
                 'gambar' => $this->copyImage(sprintf('cafe-%02d.jpg', $i + 1)),
