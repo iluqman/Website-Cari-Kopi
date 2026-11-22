@@ -57,7 +57,7 @@ class PostController extends Controller
 
         Post::create($data);
 
-        return redirect()->route('posts.index')->with('success', 'Cafe berhasil ditambahkan.');
+        return redirect()->route('posts.index')->with('success', 'Kafe berhasil ditambahkan.');
     }
 
     public function edit(Post $post)
@@ -84,7 +84,7 @@ class PostController extends Controller
             $post->products()->update(['user_id' => $post->user_id]);
         }
 
-        return redirect()->route('posts.index')->with('success', 'Cafe berhasil diperbarui.');
+        return redirect()->route('posts.index')->with('success', 'Kafe berhasil diperbarui.');
     }
 
     public function destroy(Post $post)
@@ -97,7 +97,7 @@ class PostController extends Controller
 
         $post->delete();
 
-        return redirect()->route('posts.index')->with('success', 'Cafe berhasil dihapus.');
+        return redirect()->route('posts.index')->with('success', 'Kafe berhasil dihapus.');
     }
 
     /** Calon pemilik cafe: admin toko dan admin web (plus pemilik saat ini, bila perannya sudah berubah). */

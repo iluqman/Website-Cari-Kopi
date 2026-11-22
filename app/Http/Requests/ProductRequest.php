@@ -34,7 +34,7 @@ class ProductRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'post_id' => 'cafe',
+            'post_id' => 'kafe',
             'title' => 'nama produk',
             'body' => 'deskripsi',
             'price' => 'harga',

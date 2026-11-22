@@ -35,7 +35,7 @@ class PostRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'title' => 'nama cafe',
+            'title' => 'nama kafe',
             'body' => 'deskripsi',
             'user_id' => 'pemilik',
             'gambar' => 'gambar',

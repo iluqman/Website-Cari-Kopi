@@ -58,7 +58,7 @@ return [
         'title' => 'nama',
         'body' => 'deskripsi',
         'gambar' => 'gambar',
-        'post_id' => 'cafe',
+        'post_id' => 'kafe',
         'user_id' => 'pemilik',
         'latitude' => 'latitude',
         'longitude' => 'longitude',

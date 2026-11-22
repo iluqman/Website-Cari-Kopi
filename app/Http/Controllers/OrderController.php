@@ -111,7 +111,7 @@ class OrderController extends Controller
         }
 
         return redirect()->route('orders.index')
-            ->with('success', "Pesanan berhasil dibuat ({$orders->count()} pesanan, dipisah per cafe).");
+            ->with('success', "Pesanan berhasil dibuat ({$orders->count()} pesanan, dipisah per kafe).");
     }
 
     public function show(Request $request, Order $order)
