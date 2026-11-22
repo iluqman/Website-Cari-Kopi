@@ -16,7 +16,6 @@ class PostRequest extends FormRequest
         $rules = [
             'title' => ['required', 'string', 'max:60'],
             'body' => ['required', 'string', 'max:1000'],
-            'category_id' => ['required', 'exists:categories,id'],
             'gambar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
@@ -38,7 +37,6 @@ class PostRequest extends FormRequest
         return [
             'title' => 'nama cafe',
             'body' => 'deskripsi',
-            'category_id' => 'kategori',
             'user_id' => 'pemilik',
             'gambar' => 'gambar',
         ];

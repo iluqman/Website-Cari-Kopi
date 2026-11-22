@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Concerns\FiltersLists;
 use App\Http\Controllers\Concerns\HandlesImages;
 use App\Http\Requests\PostRequest;
-use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,7 +21,6 @@ class PostController extends Controller
 
         $query = Post::query()
             ->when(! $user->isAdmin(), fn ($query) => $query->where('user_id', $user->id))
-            ->with(['category', 'user'])
             ->withCount('products')
             ->when($search !== '', function ($query) use ($search) {
                 $like = $this->like($search);
@@ -46,7 +44,6 @@ class PostController extends Controller
     {
         return view('posts.create', [
             'post' => new Post(),
-            'categories' => Category::orderBy('title')->get(),
             'owners' => $this->owners(),
         ]);
     }
@@ -69,7 +66,6 @@ class PostController extends Controller
 
         return view('posts.edit', [
             'post' => $post,
-            'categories' => Category::orderBy('title')->get(),
             'owners' => $this->owners($post->user_id),
         ]);
     }

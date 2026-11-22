@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Concerns\FiltersLists;
-use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -16,11 +15,9 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $search = trim((string) $request->query('search'));
-        $categoryId = (int) $request->query('category');
         $sort = $this->ratingSort($request);
 
         $posts = Post::query()
-            ->with('category')
             ->withAvg('reviews', 'rating')
             ->withCount('reviews')
             ->when($search !== '', function ($query) use ($search) {
@@ -33,7 +30,6 @@ class HomeController extends Controller
                         ->orWhere('kota', 'like', $like);
                 });
             })
-            ->when($categoryId, fn ($query) => $query->where('category_id', $categoryId))
             ->sortByRating($sort)
             ->latest()
             ->paginate(9)
@@ -41,9 +37,7 @@ class HomeController extends Controller
 
         return view('cafes.index', [
             'posts' => $posts,
-            'categories' => Category::orderBy('title')->get(),
             'search' => $search,
-            'categoryId' => $categoryId,
             'sort' => $sort,
         ]);
     }
@@ -53,7 +47,7 @@ class HomeController extends Controller
         $search = trim((string) $request->query('search'));
         $sort = $this->ratingSort($request);
 
-        $post->load('category')->loadAvg('reviews', 'rating')->loadCount('reviews');
+        $post->loadAvg('reviews', 'rating')->loadCount('reviews');
 
         $products = $post->products()
             ->withAvg('reviews', 'rating')

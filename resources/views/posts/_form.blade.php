@@ -7,16 +7,6 @@
         <label for="title" class="form-label">Nama cafe</label>
         <input type="text" id="title" name="title" value="{{ $field('title') }}" maxlength="60" class="form-control @error('title') is-invalid @enderror" required>
     </div>
-    <div class="{{ $isAdmin ? 'col-md-3' : 'col-md-4' }}">
-        <label for="category_id" class="form-label">Kategori</label>
-        <select id="category_id" name="category_id" class="form-select @error('category_id') is-invalid @enderror" required>
-            <option value="">— Pilih —</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}" @selected($field('category_id') == $category->id)>{{ $category->title }}</option>
-            @endforeach
-        </select>
-        @if ($categories->isEmpty())<div class="form-text">Belum ada kategori. <a href="{{ route('categories.create') }}">Buat dulu</a>.</div>@endif
-    </div>
     @can('kelola_web')
         <div class="col-md-4">
             <label for="user_id" class="form-label">Pemilik toko</label>

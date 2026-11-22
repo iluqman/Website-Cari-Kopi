@@ -12,7 +12,7 @@
     <div class="panel overflow-hidden">
         <div class="table-responsive">
             <table class="table table-coffee">
-                <thead><tr><th>Cafe</th><th>Kategori</th><th>Lokasi</th>@can('kelola_web')<th>Pemilik</th>@endcan<th class="text-center">Produk</th><th><span class="visually-hidden">Aksi</span></th></tr></thead>
+                <thead><tr><th>Cafe</th><th>Lokasi</th>@can('kelola_web')<th>Pemilik</th>@endcan<th class="text-center">Produk</th><th><span class="visually-hidden">Aksi</span></th></tr></thead>
                 <tbody>
                     @forelse ($posts as $post)
                         <tr>
@@ -22,7 +22,6 @@
                                     <a href="{{ route('home.show', $post) }}" class="fw-semibold text-decoration-none">{{ $post->title }}</a>
                                 </div>
                             </td>
-                            <td>{{ $post->category->title }}</td>
                             <td>{{ $post->kota }}, {{ $post->provinsi }}</td>
                             @can('kelola_web')<td>{{ $post->user->name }}</td>@endcan
                             <td class="text-center">{{ $post->products_count }}</td>
