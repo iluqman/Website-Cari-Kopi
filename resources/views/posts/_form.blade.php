@@ -4,7 +4,7 @@
 @endphp
 <div class="row g-3">
     <div class="{{ $isAdmin ? 'col-md-5' : 'col-md-8' }}">
-        <label for="title" class="form-label">Nama cafe</label>
+        <label for="title" class="form-label">Nama kafe</label>
         <input type="text" id="title" name="title" value="{{ $field('title') }}" maxlength="60" class="form-control @error('title') is-invalid @enderror" required>
     </div>
     @can('kelola_web')
@@ -17,7 +17,7 @@
                     </option>
                 @endforeach
             </select>
-            <div class="form-text">Pemilik menerima pesanan dari produk di cafe ini.</div>
+            <div class="form-text">Pemilik menerima pesanan dari produk di kafe ini.</div>
         </div>
     @endcan
     <div class="col-12">

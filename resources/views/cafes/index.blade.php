@@ -10,7 +10,7 @@
             <p class="lead mb-4">Daftar dan jelajahi berbagai kafe lengkap dengan menu, lokasi, dan ulasan dari pengunjung lain.</p>
 
             <a href="#daftar" class="btn btn-primary btn-lg px-4">
-                Jelajahi cafe <i class="fa-solid fa-arrow-down ms-2"></i>
+                Jelajahi kafe <i class="fa-solid fa-arrow-down ms-2"></i>
             </a>
         </div>
     </header>
@@ -19,11 +19,11 @@
 @section('content')
     <div id="daftar" class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
         <h2 class="mb-0 h3" id="list-title">
-            @if ($search !== '') Hasil untuk &ldquo;{{ $search }}&rdquo; @else Daftar Cafe @endif
+            @if ($search !== '') Hasil untuk &ldquo;{{ $search }}&rdquo; @else Daftar Kafe @endif
         </h2>
 
         <form action="{{ route('home') }}" method="GET" class="filter-bar filter-bar-lg" role="search" data-live data-live-target="#results, #list-title">
-            @include('partials.search-pill', ['search' => $search, 'placeholder' => 'Cari nama, deskripsi, atau lokasi'])
+            @include('partials.search-pill', ['search' => $search, 'placeholder' => 'Cari kafe'])
 
             <label for="sort" class="visually-hidden">Urutkan rating</label>
             <select id="sort" name="sort" class="form-select">
@@ -56,7 +56,7 @@
             <div class="col-12">
                 <div class="panel empty">
                     <i class="fa-solid fa-mug-saucer"></i>
-                    Maaf, cafe yang kamu cari tidak ditemukan.
+                    Maaf, kafe yang kamu cari tidak ditemukan.
                 </div>
             </div>
         @endforelse

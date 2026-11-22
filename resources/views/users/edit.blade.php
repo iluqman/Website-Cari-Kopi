@@ -18,7 +18,7 @@
                 <div class="form-text">Kamu tidak bisa mengubah peran akunmu sendiri.</div>
             @else
                 <div class="form-text">
-                    <strong>Admin Web</strong> mengontrol seluruh data. <strong>Admin Toko</strong> hanya mengelola cafe, produk, dan pesanan miliknya. <strong>Pelanggan</strong> hanya bisa berbelanja.
+                    <strong>Admin Web</strong> mengontrol seluruh data. <strong>Admin Toko</strong> hanya mengelola kafe, produk, dan pesanan miliknya. <strong>Pelanggan</strong> hanya bisa berbelanja.
                 </div>
             @endif
         </div>

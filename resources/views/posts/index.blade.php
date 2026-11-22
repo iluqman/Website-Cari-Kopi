@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
-@section('title', 'Kelola Cafe')
+@section('title', 'Kelola Kafe')
 @section('panel')
     <div class="page-head">
-        <h1>{{ auth()->user()->isAdmin() ? 'Semua cafe' : 'Cafe saya' }}</h1>
-        <a href="{{ route('posts.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus me-1"></i> Tambah cafe</a>
+        <h1>{{ auth()->user()->isAdmin() ? 'Semua kafe' : 'Kafe saya' }}</h1>
+        <a href="{{ route('posts.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus me-1"></i> Tambah kafe</a>
     </div>
 
     @include('partials.list-filter', ['route' => 'posts.index', 'search' => $search, 'sort' => $sort, 'placeholder' => 'Cari nama, kota, atau alamat'])
@@ -12,7 +12,7 @@
     <div class="panel overflow-hidden">
         <div class="table-responsive">
             <table class="table table-coffee">
-                <thead><tr><th>Cafe</th><th>Lokasi</th>@can('kelola_web')<th>Pemilik</th>@endcan<th class="text-center">Produk</th><th><span class="visually-hidden">Aksi</span></th></tr></thead>
+                <thead><tr><th>Kafe</th><th>Lokasi</th>@can('kelola_web')<th>Pemilik</th>@endcan<th class="text-center">Produk</th><th><span class="visually-hidden">Aksi</span></th></tr></thead>
                 <tbody>
                     @forelse ($posts as $post)
                         <tr>
@@ -28,7 +28,7 @@
                             <td class="text-end text-nowrap">
                                 @can('update', $post)<a href="{{ route('posts.edit', $post) }}" class="btn btn-outline-primary btn-sm">Edit</a>@endcan
                                 @can('delete', $post)
-                                    <form action="{{ route('posts.destroy', $post) }}" method="POST" class="d-inline" data-confirm="Hapus cafe ini beserta semua produknya?">
+                                    <form action="{{ route('posts.destroy', $post) }}" method="POST" class="d-inline" data-confirm="Hapus kafe ini beserta semua produknya?">
                                         @csrf @method('DELETE')
                                         <button class="btn btn-outline-danger btn-sm">Hapus</button>
                                     </form>
@@ -36,7 +36,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6"><div class="empty"><i class="fa-solid fa-store"></i>{{ $search !== '' ? 'Tidak ada cafe yang cocok.' : 'Belum ada cafe.' }}</div></td></tr>
+                        <tr><td colspan="6"><div class="empty"><i class="fa-solid fa-store"></i>{{ $search !== '' ? 'Tidak ada kafe yang cocok.' : 'Belum ada kafe.' }}</div></td></tr>
                     @endforelse
                 </tbody>
             </table>

@@ -9,11 +9,11 @@
             <span class="badge-soft badge-member">{{ $user->role_label }}</span>
             <span class="text-muted small ms-1">{{ $user->isAdmin() ? 'Menampilkan data seluruh situs' : 'Menampilkan data tokomu' }}</span>
         </div>
-        <a href="{{ route('posts.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus me-1"></i> Tambah cafe</a>
+        <a href="{{ route('posts.create') }}" class="btn btn-primary"><i class="fa-solid fa-plus me-1"></i> Tambah kafe</a>
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-6 col-xl-3"><div class="stat"><div class="num">{{ $stats['cafes'] }}</div><div class="label">Cafe</div></div></div>
+        <div class="col-6 col-xl-3"><div class="stat"><div class="num">{{ $stats['cafes'] }}</div><div class="label">Kafe</div></div></div>
         <div class="col-6 col-xl-3"><div class="stat"><div class="num">{{ $stats['products'] }}</div><div class="label">Produk</div></div></div>
         <div class="col-6 col-xl-3"><div class="stat"><div class="num">{{ $stats['pending'] }}</div><div class="label">Pesanan belum bayar</div></div></div>
         @if ($stats['users'] !== null)

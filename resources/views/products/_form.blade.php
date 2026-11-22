@@ -3,14 +3,14 @@
 @endphp
 <div class="row g-3">
     <div class="col-md-6">
-        <label for="post_id" class="form-label">Cafe</label>
+        <label for="post_id" class="form-label">Kafe</label>
         <select id="post_id" name="post_id" class="form-select @error('post_id') is-invalid @enderror" required>
-            <option value="">— Pilih cafe —</option>
+            <option value="">— Pilih kafe —</option>
             @foreach ($posts as $post)
                 <option value="{{ $post->id }}" @selected($field('post_id') == $post->id)>{{ $post->title }}@can('kelola_web') — {{ $post->user->name }}@endcan</option>
             @endforeach
         </select>
-        @if ($posts->isEmpty())<div class="form-text">Kamu belum punya cafe. <a href="{{ route('posts.create') }}">Tambah cafe</a> dulu.</div>@endif
+        @if ($posts->isEmpty())<div class="form-text">Kamu belum punya kafe. <a href="{{ route('posts.create') }}">Tambah kafe</a> dulu.</div>@endif
     </div>
     <div class="col-md-6">
         <label for="price" class="form-label">Harga (Rp)</label>

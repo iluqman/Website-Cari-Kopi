@@ -12,7 +12,7 @@
     <div class="panel overflow-hidden">
         <div class="table-responsive">
             <table class="table table-coffee">
-                <thead><tr><th>Produk</th><th>Cafe</th>@can('kelola_web')<th>Pemilik</th>@endcan<th class="text-end">Harga</th><th><span class="visually-hidden">Aksi</span></th></tr></thead>
+                <thead><tr><th>Produk</th><th>Kafe</th>@can('kelola_web')<th>Pemilik</th>@endcan<th class="text-end">Harga</th><th><span class="visually-hidden">Aksi</span></th></tr></thead>
                 <tbody>
                     @forelse ($products as $product)
                         <tr>

@@ -9,7 +9,7 @@
         <div class="panel empty">
             <i class="fa-solid fa-bag-shopping"></i>
             Keranjangmu masih kosong.
-            <div class="mt-3"><a href="{{ route('home') }}#daftar" class="btn btn-primary">Jelajahi cafe</a></div>
+            <div class="mt-3"><a href="{{ route('home') }}#daftar" class="btn btn-primary">Jelajahi kafe</a></div>
         </div>
     @else
         <div class="row g-4">
@@ -73,7 +73,7 @@
                     <div class="summary-row summary-total"><span>Total</span><span id="sum-total">Rp {{ number_format($totals['total'], 0, ',', '.') }}</span></div>
 
                     @if ($groups->count() > 1)
-                        <p class="small text-muted mt-3 mb-0"><i class="fa-solid fa-circle-info me-1"></i>Saat checkout, pesanan dipisah per cafe ({{ $groups->count() }} pesanan).</p>
+                        <p class="small text-muted mt-3 mb-0"><i class="fa-solid fa-circle-info me-1"></i>Saat checkout, pesanan dipisah per kafe ({{ $groups->count() }} pesanan).</p>
                     @endif
 
                     <a href="{{ route('orders.create') }}" class="btn btn-primary w-100 mt-3">Checkout</a>

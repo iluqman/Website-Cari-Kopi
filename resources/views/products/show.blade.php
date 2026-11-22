@@ -5,7 +5,7 @@
 @section('content')
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb small mb-0">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}#daftar">Cafe</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}#daftar">Kafe</a></li>
             <li class="breadcrumb-item"><a href="{{ route('home.show', $post) }}">{{ $post->title }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">{{ $product->title }}</li>
         </ol>

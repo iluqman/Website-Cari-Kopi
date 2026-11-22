@@ -9,7 +9,7 @@
         @if ($pendingOrders > 0)<span class="dash-badge">{{ $pendingOrders }}</span>@endif
     </a>
     <a href="{{ route('posts.index') }}" class="{{ request()->routeIs('posts.*') ? 'active' : '' }}">
-        <i class="fa-solid fa-store fa-fw"></i> Cafe
+        <i class="fa-solid fa-store fa-fw"></i> Kafe
     </a>
     <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.index', 'products.create', 'products.edit') ? 'active' : '' }}">
         <i class="fa-solid fa-mug-saucer fa-fw"></i> Produk
