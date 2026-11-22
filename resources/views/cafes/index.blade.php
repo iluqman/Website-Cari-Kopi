@@ -25,14 +25,6 @@
         <form action="{{ route('home') }}" method="GET" class="filter-bar filter-bar-lg" role="search" data-live data-live-target="#results, #list-title">
             @include('partials.search-pill', ['search' => $search, 'placeholder' => 'Cari nama, deskripsi, atau lokasi'])
 
-            <label for="category" class="visually-hidden">Kategori</label>
-            <select id="category" name="category" class="form-select">
-                <option value="">Semua kategori</option>
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" @selected($categoryId == $category->id)>{{ $category->title }}</option>
-                @endforeach
-            </select>
-
             <label for="sort" class="visually-hidden">Urutkan rating</label>
             <select id="sort" name="sort" class="form-select">
                 <option value="">Urutkan: terbaru</option>
@@ -40,7 +32,7 @@
                 <option value="rating_asc" @selected($sort === 'rating_asc')>Rating terendah</option>
             </select>
 
-            <button type="button" class="btn btn-outline-primary" data-live-reset @if ($search === '' && ! $categoryId && $sort === '') hidden @endif>Reset</button>
+            <button type="button" class="btn btn-outline-primary" data-live-reset @if ($search === '' && $sort === '') hidden @endif>Reset</button>
         </form>
     </div>
 
@@ -51,9 +43,8 @@
                 <article class="card-cafe">
                     <img class="thumb" src="{{ $post->gambar_url }}" alt="Foto {{ $post->title }}" loading="lazy">
                     <div class="card-body">
-                        <span class="tag">{{ $post->category->title }}</span>
                         <h3 class="card-title"><a href="{{ route('home.show', $post) }}">{{ $post->title }}</a></h3>
-                        <p class="text-muted small mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ $post->kota }}, {{ $post->provinsi }}</p>
+                        <p class="text-muted small mb-0"><i class="fa-solid fa-location-dot me-1"></i>{{ $post->alamat }}</p>
                         <p class="mb-1">{{ \Illuminate\Support\Str::limit($post->body, 100) }}</p>
                         <div class="card-actions">
                             @include('partials.rating', ['avg' => $post->reviews_avg_rating, 'count' => $post->reviews_count])

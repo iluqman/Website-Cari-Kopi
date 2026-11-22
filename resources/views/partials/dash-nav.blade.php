@@ -15,9 +15,6 @@
         <i class="fa-solid fa-mug-saucer fa-fw"></i> Produk
     </a>
     @can('kelola_web')
-        <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">
-            <i class="fa-solid fa-tags fa-fw"></i> Kategori
-        </a>
         <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
             <i class="fa-solid fa-users fa-fw"></i> Pengguna
         </a>

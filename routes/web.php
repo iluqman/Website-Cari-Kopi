@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -85,6 +84,5 @@ Route::middleware(['auth', 'can:kelola_toko'])->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'can:kelola_web'])->group(function () {
-    Route::resource('categories', CategoryController::class)->except('show');
     Route::resource('users', UserController::class)->only(['index', 'edit', 'update', 'destroy']);
 });

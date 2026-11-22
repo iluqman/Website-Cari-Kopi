@@ -15,7 +15,6 @@
             <img class="detail-cover" src="{{ $post->gambar_url }}" alt="Foto {{ $post->title }}">
         </div>
         <div class="col-lg-5">
-            <span class="tag">{{ $post->category->title }}</span>
             <h1 class="display-6 mt-1 mb-3">{{ $post->title }}</h1>
             @include('partials.rating', ['avg' => $post->reviews_avg_rating, 'count' => $post->reviews_count])
             <p class="mt-3">{{ $post->body }}</p>
