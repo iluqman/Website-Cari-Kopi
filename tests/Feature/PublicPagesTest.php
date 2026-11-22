@@ -19,24 +19,20 @@ class PublicPagesTest extends TestCase
         }
     }
 
-    public function test_home_lists_cafes_and_filters_by_search_and_category(): void
+    public function test_home_lists_cafes_and_filters_by_search(): void
     {
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $coffee = $this->makeCategory('Kopi');
-        $tea = $this->makeCategory('Teh');
-        $this->makeShop($owner, $coffee, ['title' => 'Kopi Alpha']);
-        $this->makeShop($owner, $tea, ['title' => 'Teh Beta']);
+        $this->makeShop($owner, ['title' => 'Kopi Alpha']);
+        $this->makeShop($owner, ['title' => 'Teh Beta']);
 
         $this->get('/')->assertOk()->assertSee('Kopi Alpha')->assertSee('Teh Beta');
 
         $this->get('/?search=Alpha')->assertOk()->assertSee('Kopi Alpha')->assertDontSee('Teh Beta');
-
-        $this->get('/?category='.$tea->id)->assertOk()->assertSee('Teh Beta')->assertDontSee('Kopi Alpha');
     }
 
     public function test_home_accepts_known_sorts_and_ignores_unknown_ones(): void
     {
-        $this->makeShop($this->makeUser(User::ROLE_OWNER), null, ['title' => 'Kopi Alpha']);
+        $this->makeShop($this->makeUser(User::ROLE_OWNER), ['title' => 'Kopi Alpha']);
 
         foreach (['rating_desc', 'rating_asc', 'ngawur; DROP TABLE posts'] as $sort) {
             $this->get('/?sort='.urlencode($sort))->assertOk()->assertSee('Kopi Alpha');
@@ -51,7 +47,7 @@ class PublicPagesTest extends TestCase
     public function test_cafe_detail_shows_products_and_reviews(): void
     {
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $shop = $this->makeShop($owner, null, ['title' => 'Kopi Alpha']);
+        $shop = $this->makeShop($owner, ['title' => 'Kopi Alpha']);
         $this->makeProduct($shop, 25000, ['title' => 'Latte Spesial']);
         $this->makeReview($this->makeUser(), $shop, 5, 'Tempatnya nyaman sekali');
 
@@ -96,7 +92,7 @@ class PublicPagesTest extends TestCase
 
     public function test_user_generated_text_is_escaped(): void
     {
-        $shop = $this->makeShop($this->makeUser(User::ROLE_OWNER), null, ['title' => '<b>Tebal</b>']);
+        $shop = $this->makeShop($this->makeUser(User::ROLE_OWNER), ['title' => '<b>Tebal</b>']);
         $this->makeReview($this->makeUser(), $shop, 4, "<script>alert('xss')</script>");
 
         $this->get('/')

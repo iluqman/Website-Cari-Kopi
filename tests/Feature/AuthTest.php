@@ -14,7 +14,7 @@ class AuthTest extends TestCase
 
     public function test_guest_is_sent_to_login_from_protected_pages(): void
     {
-        foreach (['/cart', '/orders', '/orders/create', '/profile', '/dashboard', '/posts', '/products', '/users', '/categories'] as $url) {
+        foreach (['/cart', '/orders', '/orders/create', '/profile', '/dashboard', '/posts', '/products', '/users'] as $url) {
             $this->get($url)->assertRedirect('/login');
         }
     }

@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\User;
@@ -16,12 +15,11 @@ class ShopManagementTest extends TestCase
 {
     use CreatesShopData, RefreshDatabase;
 
-    private function postPayload(Category $category, array $override = []): array
+    private function postPayload(array $override = []): array
     {
         return array_merge([
             'title' => 'Kopi Senja',
             'body' => 'Tempat nongkrong santai di pinggir pantai.',
-            'category_id' => $category->id,
             'latitude' => '1.1234567',
             'longitude' => '104.0305000',
             'provinsi' => 'Kepulauan Riau',
@@ -47,11 +45,10 @@ class ShopManagementTest extends TestCase
         Storage::fake('public');
         $owner = $this->makeUser(User::ROLE_OWNER);
         $other = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
 
         // user_id dari form harus diabaikan untuk admin toko.
         $this->actingAs($owner)
-            ->post('/posts', $this->postPayload($category, [
+            ->post('/posts', $this->postPayload([
                 'user_id' => $other->id,
                 'gambar' => UploadedFile::fake()->image('toko.jpg'),
             ]))
@@ -68,7 +65,7 @@ class ShopManagementTest extends TestCase
         $owner = $this->makeUser(User::ROLE_OWNER);
 
         $this->actingAs($owner)
-            ->post('/posts', $this->postPayload($this->makeCategory(), ['latitude' => '-6.2', 'longitude' => '106.8']))
+            ->post('/posts', $this->postPayload(['latitude' => '-6.2', 'longitude' => '106.8']))
             ->assertSessionHasNoErrors();
 
         $this->assertEqualsWithDelta(-6.2, Post::firstOrFail()->latitude, 0.001);
@@ -77,13 +74,11 @@ class ShopManagementTest extends TestCase
     public function test_cafe_input_is_validated(): void
     {
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
 
         $cases = [
             [['title' => ''], 'title'],
             [['title' => str_repeat('a', 61)], 'title'],
             [['body' => str_repeat('a', 1001)], 'body'],
-            [['category_id' => 9999], 'category_id'],
             [['latitude' => 91], 'latitude'],
             [['latitude' => 'abc'], 'latitude'],
             [['longitude' => 181], 'longitude'],
@@ -93,7 +88,7 @@ class ShopManagementTest extends TestCase
 
         foreach ($cases as [$override, $field]) {
             $this->actingAs($owner)
-                ->post('/posts', $this->postPayload($category, $override))
+                ->post('/posts', $this->postPayload($override))
                 ->assertSessionHasErrors($field);
         }
 
@@ -104,7 +99,6 @@ class ShopManagementTest extends TestCase
     {
         Storage::fake('public');
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
 
         foreach ([
             UploadedFile::fake()->create('shell.php', 10, 'application/x-php'),
@@ -112,7 +106,7 @@ class ShopManagementTest extends TestCase
             UploadedFile::fake()->image('besar.jpg')->size(3000),
         ] as $file) {
             $this->actingAs($owner)
-                ->post('/posts', $this->postPayload($category, ['gambar' => $file]))
+                ->post('/posts', $this->postPayload(['gambar' => $file]))
                 ->assertSessionHasErrors('gambar');
         }
 
@@ -123,14 +117,13 @@ class ShopManagementTest extends TestCase
     {
         $admin = $this->makeUser(User::ROLE_ADMIN);
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
 
-        $this->actingAs($admin)->post('/posts', $this->postPayload($category))->assertSessionHasErrors('user_id');
-        $this->actingAs($admin)->post('/posts', $this->postPayload($category, ['user_id' => 9999]))->assertSessionHasErrors('user_id');
+        $this->actingAs($admin)->post('/posts', $this->postPayload())->assertSessionHasErrors('user_id');
+        $this->actingAs($admin)->post('/posts', $this->postPayload(['user_id' => 9999]))->assertSessionHasErrors('user_id');
         $this->assertSame(0, Post::count());
 
         $this->actingAs($admin)
-            ->post('/posts', $this->postPayload($category, ['user_id' => $owner->id]))
+            ->post('/posts', $this->postPayload(['user_id' => $owner->id]))
             ->assertRedirect(route('posts.index'));
 
         $this->assertEquals($owner->id, Post::firstOrFail()->user_id);
@@ -155,11 +148,10 @@ class ShopManagementTest extends TestCase
         Storage::disk('public')->put('gambarku/lama.jpg', 'isi lama');
 
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
-        $post = $this->makeShop($owner, $category, ['gambar' => 'gambarku/lama.jpg']);
+        $post = $this->makeShop($owner, ['gambar' => 'gambarku/lama.jpg']);
 
         $this->actingAs($owner)
-            ->patch("/posts/{$post->id}", $this->postPayload($category, [
+            ->patch("/posts/{$post->id}", $this->postPayload([
                 'title' => 'Judul Baru',
                 'gambar' => UploadedFile::fake()->image('baru.jpg'),
             ]))
@@ -178,10 +170,9 @@ class ShopManagementTest extends TestCase
         Storage::disk('public')->put('gambarku/lama.jpg', 'isi lama');
 
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
-        $post = $this->makeShop($owner, $category, ['gambar' => 'gambarku/lama.jpg']);
+        $post = $this->makeShop($owner, ['gambar' => 'gambarku/lama.jpg']);
 
-        $this->actingAs($owner)->patch("/posts/{$post->id}", $this->postPayload($category, ['title' => 'Judul Baru']));
+        $this->actingAs($owner)->patch("/posts/{$post->id}", $this->postPayload(['title' => 'Judul Baru']));
 
         $this->assertSame('gambarku/lama.jpg', $post->fresh()->gambar);
         Storage::disk('public')->assertExists('gambarku/lama.jpg');
@@ -191,11 +182,10 @@ class ShopManagementTest extends TestCase
     {
         $owner = $this->makeUser(User::ROLE_OWNER);
         $intruder = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
-        $post = $this->makeShop($owner, $category, ['title' => 'Asli']);
+        $post = $this->makeShop($owner, ['title' => 'Asli']);
 
         $this->actingAs($intruder)->get("/posts/{$post->id}/edit")->assertForbidden();
-        $this->actingAs($intruder)->patch("/posts/{$post->id}", $this->postPayload($category, ['title' => 'Dibajak']))->assertForbidden();
+        $this->actingAs($intruder)->patch("/posts/{$post->id}", $this->postPayload(['title' => 'Dibajak']))->assertForbidden();
         $this->actingAs($intruder)->delete("/posts/{$post->id}")->assertForbidden();
 
         $this->assertSame('Asli', $post->fresh()->title);
@@ -204,9 +194,8 @@ class ShopManagementTest extends TestCase
     public function test_customer_cannot_manage_cafes(): void
     {
         $customer = $this->makeUser();
-        $category = $this->makeCategory();
 
-        $this->actingAs($customer)->post('/posts', $this->postPayload($category))->assertForbidden();
+        $this->actingAs($customer)->post('/posts', $this->postPayload())->assertForbidden();
         $this->assertSame(0, Post::count());
     }
 
@@ -215,12 +204,11 @@ class ShopManagementTest extends TestCase
         $admin = $this->makeUser(User::ROLE_ADMIN);
         $oldOwner = $this->makeUser(User::ROLE_OWNER);
         $newOwner = $this->makeUser(User::ROLE_OWNER);
-        $category = $this->makeCategory();
-        $post = $this->makeShop($oldOwner, $category);
+        $post = $this->makeShop($oldOwner);
         $product = $this->makeProduct($post);
 
         $this->actingAs($admin)
-            ->patch("/posts/{$post->id}", $this->postPayload($category, ['user_id' => $newOwner->id]))
+            ->patch("/posts/{$post->id}", $this->postPayload(['user_id' => $newOwner->id]))
             ->assertRedirect(route('posts.index'));
 
         $this->assertEquals($newOwner->id, $post->fresh()->user_id);
@@ -234,7 +222,7 @@ class ShopManagementTest extends TestCase
         Storage::disk('public')->put('gambarku/produk.jpg', 'x');
 
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $post = $this->makeShop($owner, null, ['gambar' => 'gambarku/cafe.jpg']);
+        $post = $this->makeShop($owner, ['gambar' => 'gambarku/cafe.jpg']);
         $this->makeProduct($post, 10000, ['gambar' => 'gambarku/produk.jpg']);
 
         $this->actingAs($owner)->delete("/posts/{$post->id}")->assertRedirect(route('posts.index'));

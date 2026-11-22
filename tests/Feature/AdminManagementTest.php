@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\User;
@@ -15,20 +14,14 @@ class AdminManagementTest extends TestCase
 {
     use CreatesShopData, RefreshDatabase;
 
-    public function test_only_the_web_admin_can_open_user_and_category_management(): void
+    public function test_only_the_web_admin_can_open_user_management(): void
     {
         foreach ([User::ROLE_CUSTOMER, User::ROLE_OWNER] as $role) {
-            $user = $this->makeUser($role);
-
-            foreach (['/users', '/categories', '/categories/create'] as $url) {
-                $this->actingAs($user)->get($url)->assertForbidden();
-            }
+            $this->actingAs($this->makeUser($role))->get('/users')->assertForbidden();
         }
 
         $admin = $this->makeUser(User::ROLE_ADMIN);
         $this->actingAs($admin)->get('/users')->assertOk();
-        $this->actingAs($admin)->get('/categories')->assertOk();
-        $this->actingAs($admin)->get('/categories/create')->assertOk();
     }
 
     public function test_shop_owner_cannot_change_roles_or_members(): void
@@ -103,7 +96,7 @@ class AdminManagementTest extends TestCase
 
         $admin = $this->makeUser(User::ROLE_ADMIN);
         $owner = $this->makeUser(User::ROLE_OWNER);
-        $post = $this->makeShop($owner, null, ['gambar' => 'gambarku/cafe.jpg']);
+        $post = $this->makeShop($owner, ['gambar' => 'gambarku/cafe.jpg']);
         $this->makeProduct($post, 10000, ['gambar' => 'gambarku/produk.jpg']);
 
         $this->actingAs($admin)->delete("/users/{$owner->id}")->assertSessionHas('success');
@@ -120,53 +113,5 @@ class AdminManagementTest extends TestCase
         $this->actingAs($this->makeUser(User::ROLE_ADMIN))
             ->get('/users?search='.urlencode("%_\\' OR 1=1 --"))
             ->assertOk();
-    }
-
-    /* ---------- Kategori ---------- */
-
-    public function test_admin_can_create_a_category_but_not_a_duplicate(): void
-    {
-        $admin = $this->makeUser(User::ROLE_ADMIN);
-
-        $this->actingAs($admin)->post('/categories', ['title' => 'Kopi'])->assertRedirect(route('categories.index'));
-        $this->assertSame(1, Category::count());
-
-        $this->actingAs($admin)->post('/categories', ['title' => 'Kopi'])->assertSessionHasErrors('title');
-        $this->assertSame(1, Category::count());
-    }
-
-    public function test_category_title_is_validated(): void
-    {
-        $admin = $this->makeUser(User::ROLE_ADMIN);
-
-        $this->actingAs($admin)->post('/categories', ['title' => ''])->assertSessionHasErrors('title');
-        $this->actingAs($admin)->post('/categories', ['title' => str_repeat('a', 51)])->assertSessionHasErrors('title');
-
-        $this->assertSame(0, Category::count());
-    }
-
-    public function test_category_can_keep_its_own_title_when_edited(): void
-    {
-        $admin = $this->makeUser(User::ROLE_ADMIN);
-        $category = $this->makeCategory('Kopi');
-
-        $this->actingAs($admin)->patch("/categories/{$category->id}", ['title' => 'Kopi'])->assertSessionHasNoErrors();
-        $this->actingAs($admin)->patch("/categories/{$category->id}", ['title' => 'Kopi Spesial'])->assertRedirect(route('categories.index'));
-
-        $this->assertSame('Kopi Spesial', $category->fresh()->title);
-    }
-
-    public function test_category_in_use_cannot_be_deleted_but_an_unused_one_can(): void
-    {
-        $admin = $this->makeUser(User::ROLE_ADMIN);
-        $used = $this->makeCategory('Dipakai');
-        $unused = $this->makeCategory('Kosong');
-        $this->makeShop($this->makeUser(User::ROLE_OWNER), $used);
-
-        $this->actingAs($admin)->delete("/categories/{$used->id}")->assertSessionHas('error');
-        $this->assertDatabaseHas('categories', ['id' => $used->id]);
-
-        $this->actingAs($admin)->delete("/categories/{$unused->id}")->assertRedirect(route('categories.index'));
-        $this->assertDatabaseMissing('categories', ['id' => $unused->id]);
     }
 }
