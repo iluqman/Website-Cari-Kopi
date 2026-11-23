@@ -29,27 +29,24 @@
                 <p class="text-muted small mt-3 mb-0">Bergabung sejak {{ $user->created_at->translatedFormat('d F Y') }}</p>
             </div>
         </div>
-
         <div class="col-lg-6">
-            <div class="panel panel-body">
-                <h2 class="h5 mb-3">Ubah password</h2>
-                <form action="{{ route('password.update') }}" method="POST">
-                    @csrf @method('PATCH')
-                    <div class="mb-3">
-                        <label for="current_password" class="form-label">Password saat ini</label>
-                        <input type="password" id="current_password" name="current_password" class="form-control @error('current_password') is-invalid @enderror" autocomplete="current-password" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password baru</label>
-                        <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" autocomplete="new-password" minlength="8" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="password_confirmation" class="form-label">Ulangi password baru</label>
-                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" autocomplete="new-password" required>
-                    </div>
-                    <button class="btn btn-primary">Simpan password</button>
-                </form>
-            </div>
+            @if ($user->password)
+                {{-- form "Ubah password" yang sudah ada, tidak diubah --}}
+                <div class="panel panel-body">
+                    <h2 class="h5 mb-3">Ubah password</h2>
+                    ...
+                </div>
+            @else
+                <div class="panel panel-body">
+                    <h2 class="h5 mb-2">Keamanan akun</h2>
+                    <p class="text-muted mb-3">
+                        Akun ini masuk dengan Google, jadi tidak ada password di CariKopi.
+                        Keamanan akunmu mengikuti pengaturan akun Google.
+                    </p>
+                    <a href="https://myaccount.google.com/security" target="_blank" rel="noopener"
+                    class="btn btn-outline-secondary">Kelola keamanan Google</a>
+                </div>
+            @endif
         </div>
     </div>
 
