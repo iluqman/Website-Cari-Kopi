@@ -31,10 +31,24 @@
         </div>
         <div class="col-lg-6">
             @if ($user->password)
-                {{-- form "Ubah password" yang sudah ada, tidak diubah --}}
                 <div class="panel panel-body">
                     <h2 class="h5 mb-3">Ubah password</h2>
-                    ...
+                    <form action="{{ route('password.update') }}" method="POST">
+                        @csrf @method('PATCH')
+                        <div class="mb-3">
+                            <label for="current_password" class="form-label">Password saat ini</label>
+                            <input type="password" id="current_password" name="current_password" class="form-control @error('current_password') is-invalid @enderror" autocomplete="current-password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password baru</label>
+                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" autocomplete="new-password" minlength="8" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="password_confirmation" class="form-label">Ulangi password baru</label>
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" autocomplete="new-password" required>
+                        </div>
+                        <button class="btn btn-primary">Simpan password</button>
+                    </form>
                 </div>
             @else
                 <div class="panel panel-body">
