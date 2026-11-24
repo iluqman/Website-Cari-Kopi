@@ -34,16 +34,6 @@ class UserController extends Controller
         ]);
     }
 
-    /** Tandai email pengguna terverifikasi secara manual (misalnya kode tidak sampai). */
-    public function verifyEmail(User $user)
-    {
-        if (! $user->hasVerifiedEmail()) {
-            $user->markEmailAsVerified();
-        }
-
-        return back()->with('success', "Email {$user->email} ditandai terverifikasi.");
-    }
-
     public function edit(User $user)
     {
         return view('users.edit', compact('user'));
