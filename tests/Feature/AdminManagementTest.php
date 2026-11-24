@@ -108,6 +108,18 @@ class AdminManagementTest extends TestCase
         Storage::disk('public')->assertMissing('gambarku/produk.jpg');
     }
 
+    public function test_user_list_opens_even_when_some_accounts_are_unverified(): void
+    {
+        // Akun lama (dibuat sebelum ada verifikasi email) punya email_verified_at kosong.
+        $legacy = $this->makeUser();
+        $legacy->forceFill(['email_verified_at' => null])->save();
+
+        $this->actingAs($this->makeUser(User::ROLE_ADMIN))
+            ->get('/users')
+            ->assertOk()
+            ->assertSee($legacy->email);
+    }
+
     public function test_user_list_search_does_not_crash_on_special_characters(): void
     {
         $this->actingAs($this->makeUser(User::ROLE_ADMIN))

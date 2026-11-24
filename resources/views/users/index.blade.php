@@ -14,23 +14,12 @@
                     @forelse ($users as $user)
                         <tr>
                             <td class="fw-semibold">{{ $user->name }}</td>
-                            <td>
-                                {{ $user->email }}
-                                @unless ($user->hasVerifiedEmail())
-                                    <span class="badge-soft" style="background:#fff3cd;color:#664d03">Belum verifikasi</span>
-                                @endunless
-                            </td>
+                            <td>{{ $user->email }}</td>
                             <td>{{ $user->role_label }}</td>
                             <td><span class="badge-soft badge-member">{{ $user->member }}</span></td>
                             <td class="text-center">{{ $user->orders_count }}</td>
                             <td class="text-end text-nowrap">
                                 <a href="{{ route('users.edit', $user) }}" class="btn btn-outline-primary btn-sm">Edit</a>
-                                @unless ($user->hasVerifiedEmail())
-                                    <form action="{{ route('users.verify', $user) }}" method="POST" class="d-inline" data-confirm="Tandai email pengguna ini sebagai terverifikasi?">
-                                        @csrf
-                                        <button class="btn btn-outline-secondary btn-sm">Verifikasi</button>
-                                    </form>
-                                @endunless
                                 @if (! $user->is(auth()->user()))
                                     <form action="{{ route('users.destroy', $user) }}" method="POST" class="d-inline" data-confirm="Hapus pengguna ini? Cafe dan produk miliknya juga ikut terhapus.">
                                         @csrf @method('DELETE')
