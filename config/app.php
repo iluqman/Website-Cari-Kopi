@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    | Cek DNS (MX/A) pada email saat daftar. Matikan hanya untuk tes tanpa internet.
+    */
+    'check_email_dns' => env('CHECK_EMAIL_DNS', true),
+
 ];

@@ -108,7 +108,7 @@ class AuthTest extends TestCase
 
         $this->post('/register', [
             'name' => 'Budi', 'email' => 'bukan-email',
-            'password' => 'rahasia-123', 'password_confirmation' => 'rahasia-123',
+            'password' => 'Rahasia-123!', 'password_confirmation' => 'Rahasia-123!',
         ])->assertSessionHasErrors('email');
 
         $this->post('/register', [
@@ -118,12 +118,12 @@ class AuthTest extends TestCase
 
         $this->post('/register', [
             'name' => 'Budi', 'email' => 'bukan-email',
-            'password' => 'rahasia-123', 'password_confirmation' => 'beda-sekali',
+            'password' => 'Rahasia-123!', 'password_confirmation' => 'beda-sekali',
         ])->assertSessionHasErrors('password');
 
         $this->post('/register', [
             'name' => str_repeat('a', 101), 'email' => 'bukan-email',
-            'password' => 'rahasia-123', 'password_confirmation' => 'rahasia-123',
+            'password' => 'Rahasia-123!', 'password_confirmation' => 'Rahasia-123!',
         ])->assertSessionHasErrors('name');
 
         $this->assertSame(0, User::count());
@@ -146,13 +146,13 @@ class AuthTest extends TestCase
         $this->actingAs($user)
             ->patch('/password', [
                 'current_password' => 'password-123',
-                'password' => 'password-baru-456',
-                'password_confirmation' => 'password-baru-456',
+                'password' => 'Password-Baru-456!',
+                'password_confirmation' => 'Password-Baru-456!',
             ])
             ->assertRedirect(route('profile'))
             ->assertSessionHas('success');
 
-        $this->assertTrue(Hash::check('password-baru-456', $user->fresh()->password));
+        $this->assertTrue(Hash::check('Password-Baru-456!', $user->fresh()->password));
     }
 
     public function test_password_change_is_rejected_with_wrong_current_password_or_bad_new_password(): void
@@ -162,8 +162,8 @@ class AuthTest extends TestCase
         $this->actingAs($user)
             ->patch('/password', [
                 'current_password' => 'salah',
-                'password' => 'password-baru-456',
-                'password_confirmation' => 'password-baru-456',
+                'password' => 'Password-Baru-456!',
+                'password_confirmation' => 'Password-Baru-456!',
             ])
             ->assertSessionHasErrors('current_password');
 

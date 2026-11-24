@@ -38,6 +38,13 @@ return [
     ],
     'not_in' => ':Attribute yang dipilih tidak valid.',
     'numeric' => ':Attribute harus berupa angka.',
+    'password' => [
+        'letters' => ':Attribute harus mengandung minimal satu huruf.',
+        'mixed' => ':Attribute harus mengandung minimal satu huruf besar dan satu huruf kecil.',
+        'numbers' => ':Attribute harus mengandung minimal satu angka.',
+        'symbols' => ':Attribute harus mengandung minimal satu simbol (misalnya ! @ # $ %).',
+        'uncompromised' => ':Attribute ini pernah muncul dalam kebocoran data. Pilih password lain.',
+    ],
     'regex' => 'Format :attribute tidak valid.',
     'required' => ':Attribute wajib diisi.',
     'required_with' => ':Attribute wajib diisi bila :values diisi.',
@@ -52,6 +59,7 @@ return [
     'attributes' => [
         'name' => 'nama',
         'email' => 'email',
+        'code' => 'kode verifikasi',
         'password' => 'password',
         'password_confirmation' => 'konfirmasi password',
         'current_password' => 'password saat ini',

@@ -37,11 +37,16 @@ class GoogleAuthController extends Controller
             ?? User::where('email', $email)->first()
             ?? new User(['name' => Str::limit($google->getName() ?: $email, 100, ''), 'email' => $email]);
 
+        $attributes = ['google_id' => $google->getId()];
+
+        if (! $user->email_verified_at) {
+            // Akun lama ini belum pernah membuktikan kepemilikan email, jadi password lamanya bisa saja
+            // dipasang orang lain. Pemilik email yang asli baru terbukti lewat Google: password itu dibuang.
+            $attributes += ['password' => null, 'email_verified_at' => now()];
+        }
+
         // forceFill: google_id & email_verified_at sengaja tidak fillable (sama seperti role/member).
-        $user->forceFill([
-            'google_id' => $google->getId(),
-            'email_verified_at' => $user->email_verified_at ?? now(),
-        ])->save();
+        $user->forceFill($attributes)->save();
 
         Auth::login($user, true);
         $request->session()->regenerate();

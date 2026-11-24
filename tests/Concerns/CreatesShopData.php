@@ -24,8 +24,8 @@ trait CreatesShopData
             'password' => bcrypt('password-123'),
         ]);
 
-        // role & member sengaja tidak fillable, jadi diisi eksplisit.
-        $user->forceFill(['role' => $role, 'member' => $member])->save();
+        // role, member & email_verified_at sengaja tidak fillable, jadi diisi eksplisit.
+        $user->forceFill(['role' => $role, 'member' => $member, 'email_verified_at' => now()])->save();
 
         return $user;
     }

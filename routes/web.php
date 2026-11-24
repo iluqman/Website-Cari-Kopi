@@ -33,6 +33,9 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login.verify');
     Route::get('register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('register', [AuthController::class, 'register'])->middleware('throttle:5,1')->name('register.store');
+    // Batas per IP: 3 kode/menit dan 20 kode/jam (melindungi kuota Gmail dan alamat orang lain dari spam).
+    Route::post('register/code', [AuthController::class, 'sendSignupCode'])
+        ->middleware(['throttle:3,1', 'throttle:20,60,signup-code-hourly'])->name('register.code');
     Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
     Route::get('auth/google/callback', [GoogleAuthController::class, 'callback'])
         ->middleware('throttle:10,1')->name('google.callback');
@@ -47,7 +50,9 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('profile', [ProfileController::class, 'show'])->name('profile');
+    Route::patch('profile/name', [ProfileController::class, 'updateName'])->middleware('throttle:10,1')->name('profile.name');
     Route::patch('password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::post('password', [ProfileController::class, 'createPassword'])->middleware('throttle:5,1')->name('password.create');
 
     // Keranjang
     Route::get('cart', [CartController::class, 'index'])->name('cart');

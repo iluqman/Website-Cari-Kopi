@@ -34,7 +34,7 @@
       var msg = document.createElement('div');
       msg.className = 'invalid-feedback d-block';
       msg.textContent = map[name];
-      (field.closest('.qty, .rate-input, .search-pill, .password-field') || field).insertAdjacentElement('afterend', msg);
+      (field.closest('.qty, .rate-input, .search-pill, .password-field, .input-group') || field).insertAdjacentElement('afterend', msg);
     });
   }
 

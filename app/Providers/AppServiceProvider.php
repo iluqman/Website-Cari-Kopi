@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\View;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\ServiceProvider;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
@@ -30,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isProduction()) {
             URL::forceScheme('https');
         }
+
+        // Aturan password baru (daftar, buat, dan ganti password): minimal 8 karakter dengan
+        // huruf besar, huruf kecil, angka, dan simbol. Satu tempat, dipakai lewat Password::defaults().
+        Password::defaults(fn () => Password::min(8)->mixedCase()->numbers()->symbols());
 
         Paginator::useBootstrapFive();
 

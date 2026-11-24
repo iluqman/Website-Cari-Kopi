@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ['email' => $email],
             ['name' => $name, 'password' => Hash::make('password')]
         );
-        $user->forceFill(['role' => $role])->save();
+        // Akun bawaan memakai email contoh, jadi langsung dianggap terverifikasi.
+        $user->forceFill(['role' => $role, 'email_verified_at' => $user->email_verified_at ?? now()])->save();
     }
 }

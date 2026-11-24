@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
 {
@@ -29,12 +30,32 @@ class User extends Authenticatable
         'diamond' => 0.3,
     ];
 
+    /** Nama pengguna hanya boleh diganti sekali dalam jangka waktu ini. */
+    public const NAME_CHANGE_COOLDOWN_DAYS = 7;
+
     // `role` dan `member` sengaja tidak fillable: hanya diubah lewat kode/admin.
     protected $fillable = ['name', 'email', 'password'];
 
     protected $hidden = ['password', 'remember_token'];
 
-    protected $casts = ['email_verified_at' => 'datetime'];
+    protected $casts = ['email_verified_at' => 'datetime', 'name_changed_at' => 'datetime'];
+
+    /** Kapan nama boleh diganti lagi; null kalau sekarang sudah boleh. */
+    public function nameChangeAvailableAt(): ?Carbon
+    {
+        if (! $this->name_changed_at) {
+            return null;
+        }
+
+        $availableAt = $this->name_changed_at->copy()->addDays(self::NAME_CHANGE_COOLDOWN_DAYS);
+
+        return $availableAt->isFuture() ? $availableAt : null;
+    }
+
+    public function canChangeName(): bool
+    {
+        return $this->nameChangeAvailableAt() === null;
+    }
 
     /** Admin web (akses penuh). */
     public function isAdmin(): bool

@@ -25,7 +25,10 @@
         <div class="d-flex align-items-center my-3">
             <hr class="flex-grow-1 m-0"><span class="px-3 text-muted small">atau</span><hr class="flex-grow-1 m-0">
         </div>
-        <a href="{{ route('google.redirect') }}" class="btn btn-outline-secondary w-100 py-2">Masuk dengan Google</a>
+        <a href="{{ route('google.redirect') }}" class="btn btn-outline-secondary w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+            @include('partials.google-logo')
+            <span>Masuk dengan Google</span>
+        </a>
     </form>
 
     <p class="text-center text-muted mt-4 mb-0">Belum punya akun? <a href="{{ route('register') }}">Daftar</a></p>

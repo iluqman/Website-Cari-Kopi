@@ -128,7 +128,7 @@ class DummyDataSeeder extends Seeder
     private function account(string $email, string $name, string $role): User
     {
         $user = User::firstOrCreate(['email' => $email], ['name' => $name, 'password' => Hash::make('password')]);
-        $user->forceFill(['role' => $role])->save();
+        $user->forceFill(['role' => $role, 'email_verified_at' => $user->email_verified_at ?? now()])->save();
 
         return $user;
     }
@@ -145,7 +145,11 @@ class DummyDataSeeder extends Seeder
                 'email' => "test{$i}@carikopi.test",
                 'password' => Hash::make('password'),
             ]);
-            $user->forceFill(['role' => User::ROLE_CUSTOMER, 'member' => $this->pick($members)])->save();
+            $user->forceFill([
+                'role' => User::ROLE_CUSTOMER,
+                'member' => $this->pick($members),
+                'email_verified_at' => now(),
+            ])->save();
 
             $customers[] = $user;
         }
